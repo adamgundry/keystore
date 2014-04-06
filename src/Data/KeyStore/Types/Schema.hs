@@ -32,24 +32,33 @@ keystoreChangelog :: APIChangelog
 ks :: KeyStore
     // the keystore
     = record
-        config :: Configuration
-        keymap :: KeyMap
+        config :: Configuration     // the configuration for the keystore
+        keymap :: KeyMap            // mapping of each key name to its attributes
 
 cfg :: Configuration
+    // the keystore setting come in two parts: the global settings
+    // and the context-sensitive settings, triggered by a regular expression
+    // matching the name of the key
     = record
-        settings :: Settings
-        triggers :: TriggerMap
+        settings :: Settings        // the global settings for the keystore
+        triggers :: TriggerMap      // a list of settings predicated by regular expressions on key names
 
 tmp :: TriggerMap
+    // a triiger map is just a list of Trigger values
     = record
         map :: [Trigger]
     with inj_trigger_map, prj_trigger_map
 
 trg :: Trigger
+    // a trigger consists of its name (an editing handle), a regular expression
+    // for matching key names and the contextual settings. The idea is that
+    // the settings any operation on a key are calculated by joining the global
+    // settings with any settings associated with a regular expression that
+    // matches the key name
     = record
-        id       :: TriggerID
-        pattern  :: Pattern
-        settings :: Settings
+        id       :: TriggerID       // the editing handle for the trigger
+        pattern  :: Pattern         // the regular expression for matching key names
+        settings :: Settings        // the contextual settings
 
 stgs :: Settings
     = record
